@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { convertToCoreMessages, streamText } from "ai";
+import { streamText } from "ai";
 import { z } from "zod";
 
 export async function POST(request: Request) {
@@ -32,10 +32,10 @@ export async function POST(request: Request) {
     Use the addReasoningStep function for each step of your reasoning.
     `;
 
-  const result = await streamText({
+  const result = streamText({
     model: openai("gpt-4o-mini"),
     system: systemMessage,
-    messages: convertToCoreMessages(messages),
+    messages,
     maxSteps: 10,
     experimental_toolCallStreaming: true,
     tools: {
