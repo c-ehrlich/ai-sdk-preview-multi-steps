@@ -1,3 +1,4 @@
+import { telemetry } from "@/lib/instrumentation";
 import "./globals.css";
 import { Metadata } from "next";
 import { Toaster } from "sonner";
@@ -5,9 +6,10 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   metadataBase: new URL("https://ai-sdk-preview-roundtrips.vercel.app"),
   title: "Multi-Step Reasoning with the AI SDK",
-  description:
-    "Reasoning with multi-step generations and the AI SDK",
+  description: "Reasoning with multi-step generations and the AI SDK",
 };
+
+telemetry?.start();
 
 export default function RootLayout({
   children,

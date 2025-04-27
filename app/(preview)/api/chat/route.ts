@@ -1,6 +1,10 @@
+import { telemetry } from "@/lib/instrumentation";
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { z } from "zod";
+import "dotenv/config";
+
+telemetry?.start();
 
 export async function POST(request: Request) {
   const { messages } = await request.json();
@@ -37,6 +41,9 @@ export async function POST(request: Request) {
     system: systemMessage,
     messages,
     maxSteps: 10,
+    experimental_telemetry: {
+      isEnabled: true,
+    },
     experimental_toolCallStreaming: true,
     tools: {
       addAReasoningStep: {
@@ -46,12 +53,12 @@ export async function POST(request: Request) {
           content: z
             .string()
             .describe(
-              "The content of the reasoning step. WRITE OUT ALL OF YOUR WORK. Where relevant, prove things mathematically.",
+              "The content of the reasoning step. WRITE OUT ALL OF YOUR WORK. Where relevant, prove things mathematically."
             ),
           nextStep: z
             .enum(["continue", "finalAnswer"])
             .describe(
-              "Whether to continue with another step or provide the final answer",
+              "Whether to continue with another step or provide the final answer"
             ),
         }),
         execute: async (params) => params,
